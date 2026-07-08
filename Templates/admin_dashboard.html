@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">📊 Admin Dashboard</h2>
+
+  <div class="row text-center">
+    <div class="col-md-4">
+      <div class="card bg-primary text-white mb-4">
+        <div class="card-body">
+          <h4>Total Complaints</h4>
+          <h2>{{ total_complaints }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card bg-warning text-dark mb-4">
+        <div class="card-body">
+          <h4>Status-wise Count</h4>
+          {% for item in status_counts %}
+            <p>{{ item.status }}: {{ item.count }}</p>
+          {% empty %}
+            <p>No data</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card bg-success text-white mb-4">
+        <div class="card-body">
+          <h4>Category-wise Count</h4>
+          {% for item in category_counts %}
+            <p>{{ item.category }}: {{ item.count }}</p>
+          {% empty %}
+            <p>No data</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

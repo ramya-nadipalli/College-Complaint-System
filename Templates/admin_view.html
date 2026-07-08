@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">🛠 Admin Complaint Panel</h2>
+  <form method="get" class="mb-4 text-center">
+    <label for="status" class="form-label">Filter by Status:</label>
+    <select name="status" id="status" class="form-select w-auto d-inline-block mx-2">
+      <option value="">All</option>
+      <option value="Pending" {% if request.GET.status == "Pending" %}selected{% endif %}>Pending</option>
+      <option value="In Progress" {% if request.GET.status == "In Progress" %}selected{% endif %}>In Progress</option>
+      <option value="Resolved" {% if request.GET.status == "Resolved" %}selected{% endif %}>Resolved</option>
+    </select>
+    <button type="submit" class="btn btn-outline-primary">Apply</button>
+  </form>
+
+  <div class="text-end mb-3">
+    <a href="{% url 'export_csv' %}" class="btn btn-outline-dark">⬇ Download CSV</a>
+  </div>
+
+  {% if complaints %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {% for complaint in complaints %}
+        <div class="col">
+          <div class="card border-secondary shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{ complaint.title }}</h5>
+              <p class="card-text">{{ complaint.description }}</p>
+              <p><strong>Category:</strong> {{ complaint.category }}</p>
+              <p><strong>Student:</strong> {{ complaint.student.username }}</p>
+              <p>
+                <strong>Status:</strong>
+                <span class="badge 
+                  {% if complaint.status == 'Pending' %}bg-warning
+                  {% elif complaint.status == 'In Progress' %}bg-primary
+                  {% elif complaint.status == 'Resolved' %}bg-success
+                  {% endif %}
+                  text-dark">
+                  {{ complaint.status }}
+                </span>
+              </p>
+              <div class="d-flex gap-2 mt-3 flex-wrap">
+                <a href="{% url 'update_status' complaint.id 'Pending' %}" class="btn btn-sm btn-outline-warning">Set Pending</a>
+                <a href="{% url 'update_status' complaint.id 'In Progress' %}" class="btn btn-sm btn-outline-primary">In Progress</a>
+                <a href="{% url 'update_status' complaint.id 'Resolved' %}" class="btn btn-sm btn-outline-success">Resolved</a>
+              </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+              <small class="text-muted">Submitted: {{ complaint.submitted_at|date:"d M Y, h:i A" }}</small>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center mt-5">
+      No complaints found.
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

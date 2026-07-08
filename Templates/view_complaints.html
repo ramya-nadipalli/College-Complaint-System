@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Complaints</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">📋 My Complaints</h2>
+
+  {% if complaints %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {% for complaint in complaints %}
+        <div class="col">
+          <div class="card h-100 border border-secondary shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{ complaint.title }}</h5>
+              <p class="card-text">{{ complaint.description }}</p>
+              <span class="badge bg-warning text-dark">Status: {{ complaint.status }}</span>
+            </div>
+            <div class="card-footer text-muted text-end">
+              Submitted: {{ complaint.created_at|date:"d M Y, h:i A" }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center">
+      No complaints submitted yet.
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}
+    </ul>
+    <a href="{% url 'submit_complaint' %}">Submit New</a>
+</body>
+</html>
