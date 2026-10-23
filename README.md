@@ -1,68 +1,141 @@
-# 🎓 ACET College Complaint Portal – Live Project
+# College Complaint Management System
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Click%20Here-6366f1?style=for-the-badge&logo=github)](https://ramya-nadipalli.github.io/College-Complaint-System/)
+A web application built using Django where students can submit complaints, track their status, and get responses from the admin. The project also has a live frontend demo deployed on GitHub Pages.
 
-A **fully redesigned, premium dark-mode** frontend of the College Complaint Management System — built with pure HTML, CSS & JavaScript.
-
-> 🔗 **Live URL:** https://ramya-nadipalli.github.io/College-Complaint-System/
+**Live Demo:** https://ramya-nadipalli.github.io/College-Complaint-System/
 
 ---
 
-## 🚀 Features
+## About the Project
 
-- 🌙 **Dark Mode Glassmorphism UI** — Modern, premium design
-- 📊 **Animated Dashboard** — Donut charts, bar charts, stat counters
-- 👤 **Student Portal** — Register, Login, Submit & Track complaints
-- 🛡️ **Admin Panel** — Manage all complaints, update status, respond
-- 🔍 **Real-time Status Tracking** — Visual progress steps + timeline
-- 🔔 **Notification Badges** — Live alerts for pending complaints
-- ⬇️ **CSV Export** — Download complaint reports as CSV
-- 📱 **Fully Responsive** — Works on mobile, tablet, and desktop
+I built this as a full-stack project to solve a real problem in college — students usually have no proper way to raise complaints and don't know what happens after. This system gives students a place to submit their complaint, pick a category, and actually see when it's been resolved or responded to.
+
+The Django backend handles the logic and database, and I also built a standalone frontend version (HTML/CSS/JS) that can run without a server so anyone can see the working interface live.
 
 ---
 
-## 🔑 Demo Credentials
+## Features
+
+- Student registration and login
+- Submit complaints with category (Hostel, Academics, Infrastructure, Others)
+- Track complaint status — Pending, In Progress, Resolved
+- Admin dashboard to view all complaints and update their status
+- Admin can write a response to each complaint
+- Export all complaints as a CSV report
+- Separate login pages for students and admins
+
+---
+
+## Tech Stack
+
+**Backend (Django version):**
+- Python 3
+- Django 3.2
+- SQLite (database)
+- Bootstrap 5
+
+**Frontend (Live Demo version):**
+- HTML5, CSS3, JavaScript
+- localStorage for data persistence
+- Deployed on GitHub Pages
+
+---
+
+## How to Run Locally (Django Version)
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/ramya-nadipalli/College-Complaint-System.git
+cd College-Complaint-System
+
+# 2. Create virtual environment
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Mac/Linux
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run migrations
+python manage.py migrate
+
+# 5. Create admin user
+python manage.py createsuperuser
+
+# 6. Start the server
+python manage.py runserver
+```
+
+Then open http://127.0.0.1:8000/ in your browser.
+
+---
+
+## Project Structure
+
+```
+College-Complaint-System/
+│
+├── Complaints/              # Main Django app
+│   ├── models.py            # Complaint model
+│   ├── views.py             # All views (login, register, submit, admin)
+│   ├── forms.py             # Complaint form
+│   ├── urls.py              # App URLs
+│   └── admin.py             # Admin config
+│
+├── Templates/               # HTML templates
+│   ├── base.html
+│   ├── home.html
+│   ├── login.html
+│   ├── register.html
+│   ├── submit_complaint.html
+│   ├── view_complaints.html
+│   ├── admin_dashboard.html
+│   └── admin_view.html
+│
+├── static/                  # CSS and JS files
+├── college_portal/          # Django project settings
+├── manage.py
+├── requirements.txt
+│
+│ -- Live Frontend Demo (GitHub Pages) --
+├── index.html               # Landing page
+├── dashboard.html           # Student dashboard
+├── admin-dashboard.html     # Admin panel
+├── style.css                # Stylesheet
+├── main.js                  # Utilities
+└── data.js                  # Data layer
+```
+
+---
+
+## Demo Credentials (Live Version)
 
 | Role | Username | Password |
 |------|----------|----------|
-| 👨‍🎓 Student | student1 | student123 |
-| 🛡️ Admin | admin | admin123 |
+| Student | student1 | student123 |
+| Admin | admin | admin123 |
 
 ---
 
-## 🛠️ Tech Stack
+## Screenshots
 
-HTML5 · CSS3 (Glassmorphism + Animations) · JavaScript ES6+ · Google Fonts (Inter)
-
----
-
-## 📂 Project Structure
-
-```
-college_portal/
-├── index.html            → Home / Landing Page
-├── login.html            → Student Login
-├── register.html         → Student Registration
-├── dashboard.html        → Student Dashboard (Charts + Stats)
-├── submit.html           → Submit Complaint Form
-├── my-complaints.html    → View & Track My Complaints
-├── track.html            → Track Complaint by ID
-├── admin-login.html      → Admin Login
-├── admin-dashboard.html  → Admin Analytics Dashboard
-├── admin-complaints.html → Manage All Complaints
-├── style.css             → Global Dark Mode Stylesheet
-├── main.js               → Shared Utilities (Auth, Toasts)
-└── data.js               → Data Layer (LocalStorage CRUD)
-```
+**Home Page**
+![Home Page](https://ramya-nadipalli.github.io/College-Complaint-System/preview-home.png)
 
 ---
 
-## 🔗 Original Django Repository
+## What I Learned
 
-Backend source code: https://github.com/ramya-nadipalli/College-Complaint-System
+- How to build a full-stack web application using Django
+- Working with Django's built-in authentication system
+- Model relationships and database queries
+- How to separate admin and student roles in the same application
+- Deploying a static frontend to GitHub Pages
 
 ---
 
-## 👩‍💻 Developer
+## Developer
 
-**Ramya Nadipalli** — https://github.com/ramya-nadipalli
+Ramya Nadipalli
+- GitHub: https://github.com/ramya-nadipalli
+- Email: sriramyanadipalli@gmail.com
