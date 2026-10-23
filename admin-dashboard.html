@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – ACET Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-blob blob1" style="background:radial-gradient(circle,#7c3aed,transparent);"></div>
+  <div class="bg-blob blob2" style="background:radial-gradient(circle,#dc2626,transparent);"></div>
+
+  <div class="dashboard-layout">
+    <!-- Admin Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="brand-icon">🛡️</span>
+          <span class="brand-name">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Management</span>
+        <a href="admin-dashboard.html" class="sidebar-link active"><span class="link-icon">📊</span> Dashboard</a>
+        <a href="admin-complaints.html" class="sidebar-link"><span class="link-icon">📋</span> All Complaints <span class="badge" id="sidebar-pending">0</span></a>
+        <span class="nav-section-label" style="margin-top:24px;">Account</span>
+        <a href="#" class="sidebar-link" onclick="logout()"><span class="link-icon">🚪</span> Logout</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-pill">
+          <div class="avatar" style="background:linear-gradient(135deg,#dc2626,#9333ea);">A</div>
+          <div class="user-info">
+            <span class="user-name" id="admin-name">Admin</span>
+            <span class="user-role" style="color:#fca5a5;">Administrator</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <div class="topbar-title">
+          <h2>📊 Admin Dashboard</h2>
+          <p>Overview of all complaints across ACET</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;" onclick="exportCSV()">
+            ⬇️ Export CSV
+          </button>
+          <a href="admin-complaints.html" class="btn btn-primary btn-sm">Manage Complaints</a>
+        </div>
+      </div>
+
+      <div class="page-content stagger">
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Total Complaints</span>
+              <div class="stat-card-icon" style="background:rgba(99,102,241,0.15);">📋</div>
+            </div>
+            <div class="stat-card-value" id="adm-total">0</div>
+            <div class="stat-card-sub">All time</div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Pending</span>
+              <div class="stat-card-icon" style="background:rgba(245,158,11,0.15);">⏳</div>
+            </div>
+            <div class="stat-card-value" style="color:#fcd34d;" id="adm-pending">0</div>
+            <div class="stat-card-sub">Needs attention</div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">In Progress</span>
+              <div class="stat-card-icon" style="background:rgba(99,102,241,0.15);">🔄</div>
+            </div>
+            <div class="stat-card-value" style="color:#a5b4fc;" id="adm-progress">0</div>
+            <div class="stat-card-sub">Being handled</div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Resolved</span>
+              <div class="stat-card-icon" style="background:rgba(16,185,129,0.15);">✅</div>
+            </div>
+            <div class="stat-card-value" style="color:#6ee7b7;" id="adm-resolved">0</div>
+            <div class="stat-card-sub">Successfully closed</div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-row">
+          <!-- Category Donut -->
+          <div class="chart-card glass-card">
+            <div class="chart-title">Complaints by Category</div>
+            <div class="chart-subtitle">Distribution across all departments</div>
+            <div class="donut-wrap">
+              <svg class="donut-svg" width="140" height="140" viewBox="0 0 140 140" id="adm-donut">
+                <circle cx="70" cy="70" r="52" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="20"/>
+              </svg>
+              <div class="donut-legend">
+                <div class="legend-item"><span class="legend-dot" style="background:#6366f1;"></span><span class="legend-label">Academics</span><span class="legend-val" id="adm-leg-ac">0</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#f59e0b;"></span><span class="legend-label">Hostel</span><span class="legend-val" id="adm-leg-ho">0</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#10b981;"></span><span class="legend-label">Infrastructure</span><span class="legend-val" id="adm-leg-in">0</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#ec4899;"></span><span class="legend-label">Others</span><span class="legend-val" id="adm-leg-ot">0</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Bars -->
+          <div class="chart-card glass-card">
+            <div class="chart-title">Resolution Rate</div>
+            <div class="chart-subtitle">Status distribution of all complaints</div>
+            <div class="bar-chart">
+              <div class="bar-row">
+                <div class="bar-info"><span class="bar-label">⏳ Pending</span><span class="bar-value" id="adm-bar-p-v">0</span></div>
+                <div class="bar-track"><div class="bar-fill" id="adm-bar-p" style="background:linear-gradient(90deg,#f59e0b,#f97316);width:0%;"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-info"><span class="bar-label">🔄 In Progress</span><span class="bar-value" id="adm-bar-ip-v">0</span></div>
+                <div class="bar-track"><div class="bar-fill" id="adm-bar-ip" style="background:linear-gradient(90deg,#6366f1,#8b5cf6);width:0%;"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-info"><span class="bar-label">✅ Resolved</span><span class="bar-value" id="adm-bar-r-v">0</span></div>
+                <div class="bar-track"><div class="bar-fill" id="adm-bar-r" style="background:linear-gradient(90deg,#10b981,#059669);width:0%;"></div></div>
+              </div>
+            </div>
+            <!-- Resolution % -->
+            <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-glass);">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:13px;color:var(--text-muted);">Overall Resolution Rate</span>
+                <span style="font-size:20px;font-weight:800;color:#6ee7b7;" id="resolution-rate">0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent All Complaints -->
+        <div class="table-card glass-card">
+          <div class="table-header">
+            <span class="table-title">Recent Complaints (All Students)</span>
+            <div class="table-actions">
+              <a href="admin-complaints.html" class="btn btn-outline btn-sm">Manage All →</a>
+              <button class="btn btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;" onclick="exportCSV()">⬇️ Export CSV</button>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="adm-recent-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="main.js"></script>
+  <script src="data.js"></script>
+  <script>
+    adminGuard();
+    const user = JSON.parse(localStorage.getItem('acet_user') || '{}');
+    document.getElementById('admin-name').textContent = user.name || 'Admin';
+
+    function loadAdminDashboard() {
+      const all = getAllComplaints();
+      const total = all.length;
+      const pending = all.filter(c => c.status === 'Pending').length;
+      const inProg = all.filter(c => c.status === 'In Progress').length;
+      const resolved = all.filter(c => c.status === 'Resolved').length;
+
+      animateCount('adm-total', total);
+      animateCount('adm-pending', pending);
+      animateCount('adm-progress', inProg);
+      animateCount('adm-resolved', resolved);
+
+      document.getElementById('sidebar-pending').textContent = pending;
+      if (!pending) document.getElementById('sidebar-pending').style.display = 'none';
+
+      // Resolution rate
+      const rate = total ? Math.round(resolved / total * 100) : 0;
+      document.getElementById('resolution-rate').textContent = rate + '%';
+
+      // Bars
+      setTimeout(() => {
+        const max = Math.max(total, 1);
+        document.getElementById('adm-bar-p').style.width = (pending / max * 100) + '%';
+        document.getElementById('adm-bar-ip').style.width = (inProg / max * 100) + '%';
+        document.getElementById('adm-bar-r').style.width = (resolved / max * 100) + '%';
+        document.getElementById('adm-bar-p-v').textContent = pending;
+        document.getElementById('adm-bar-ip-v').textContent = inProg;
+        document.getElementById('adm-bar-r-v').textContent = resolved;
+      }, 300);
+
+      // Category donut
+      const cats = { Academics: 0, Hostel: 0, Infrastructure: 0, Others: 0 };
+      all.forEach(c => { if (cats[c.category] !== undefined) cats[c.category]++; });
+      document.getElementById('adm-leg-ac').textContent = cats.Academics;
+      document.getElementById('adm-leg-ho').textContent = cats.Hostel;
+      document.getElementById('adm-leg-in').textContent = cats.Infrastructure;
+      document.getElementById('adm-leg-ot').textContent = cats.Others;
+      drawDonut('adm-donut', [cats.Academics, cats.Hostel, cats.Infrastructure, cats.Others], ['#6366f1','#f59e0b','#10b981','#ec4899'], total);
+
+      // Recent table
+      const tbody = document.getElementById('adm-recent-tbody');
+      const recent = [...all].reverse().slice(0, 8);
+      if (!recent.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="table-empty">No complaints yet.</td></tr>';
+      } else {
+        tbody.innerHTML = recent.map(c => `
+          <tr>
+            <td style="color:var(--text-muted);font-size:12px;">#${c.id}</td>
+            <td style="font-weight:500;">👤 ${c.student}</td>
+            <td>${c.title}</td>
+            <td><span class="cat-badge">${c.category}</span></td>
+            <td>${statusBadge(c.status)}</td>
+            <td style="color:var(--text-muted);font-size:12px;">${formatDate(c.submitted_at)}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function exportCSV() {
+      const all = getAllComplaints();
+      if (!all.length) return showToast('No complaints to export.', 'error');
+      const rows = [['ID','Student','Title','Category','Status','Response','Submitted At']];
+      all.forEach(c => rows.push([c.id, c.student, c.title, c.category, c.status, c.response || '', formatDate(c.submitted_at)]));
+      const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'acet_complaints_report.csv';
+      a.click();
+      showToast('CSV report downloaded! 📥', 'success');
+    }
+
+    loadAdminDashboard();
+  </script>
+</body>
+</html>

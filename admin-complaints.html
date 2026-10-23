@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Complaints – ACET Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-blob blob1" style="background:radial-gradient(circle,#7c3aed,transparent);"></div>
+  <div class="bg-blob blob2" style="background:radial-gradient(circle,#dc2626,transparent);"></div>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="brand-icon">🛡️</span>
+          <span class="brand-name">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Management</span>
+        <a href="admin-dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+        <a href="admin-complaints.html" class="sidebar-link active"><span class="link-icon">📋</span> All Complaints</a>
+        <span class="nav-section-label" style="margin-top:24px;">Account</span>
+        <a href="#" class="sidebar-link" onclick="logout()"><span class="link-icon">🚪</span> Logout</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-pill">
+          <div class="avatar" style="background:linear-gradient(135deg,#dc2626,#9333ea);">A</div>
+          <div class="user-info">
+            <span class="user-name" id="admin-name">Admin</span>
+            <span class="user-role" style="color:#fca5a5;">Administrator</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <div class="topbar-title">
+          <h2>📋 Manage All Complaints</h2>
+          <p>Review, respond, and update complaint statuses</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;" onclick="exportCSV()">⬇️ Export CSV</button>
+        </div>
+      </div>
+
+      <div class="page-content stagger">
+        <div class="table-card glass-card">
+          <div class="table-header">
+            <span class="table-title">All Complaints <span id="complaint-count" style="color:var(--text-muted);font-size:13px;font-weight:400;"></span></span>
+            <div class="table-actions">
+              <select class="filter-select" id="adm-filter-status" onchange="loadAllComplaints()">
+                <option value="">All Status</option>
+                <option value="Pending">⏳ Pending</option>
+                <option value="In Progress">🔄 In Progress</option>
+                <option value="Resolved">✅ Resolved</option>
+              </select>
+              <select class="filter-select" id="adm-filter-cat" onchange="loadAllComplaints()">
+                <option value="">All Categories</option>
+                <option value="Hostel">🏠 Hostel</option>
+                <option value="Academics">📚 Academics</option>
+                <option value="Infrastructure">🏗️ Infrastructure</option>
+                <option value="Others">❓ Others</option>
+              </select>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adm-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Manage Modal -->
+  <div class="modal-overlay" id="manage-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title" id="manage-modal-title">Manage Complaint</span>
+        <button class="modal-close" onclick="closeManageModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">
+          <div>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);">Student</span>
+            <p id="mng-student" style="margin-top:4px;font-size:14px;"></p>
+          </div>
+          <div>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);">Category &amp; Current Status</span>
+            <p id="mng-cat-status" style="margin-top:4px;"></p>
+          </div>
+          <div>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);">Description</span>
+            <p id="mng-desc" style="margin-top:4px;font-size:14px;color:var(--text-secondary);line-height:1.6;"></p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Update Status</label>
+          <select id="mng-status" class="form-select">
+            <option value="Pending">⏳ Pending</option>
+            <option value="In Progress">🔄 In Progress</option>
+            <option value="Resolved">✅ Resolved</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Admin Response / Resolution Note</label>
+          <textarea id="mng-response" class="form-control" rows="4" placeholder="Write your response or resolution note here…"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeManageModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveUpdate()">💾 Save &amp; Update</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="main.js"></script>
+  <script src="data.js"></script>
+  <script>
+    adminGuard();
+    const user = JSON.parse(localStorage.getItem('acet_user') || '{}');
+    document.getElementById('admin-name').textContent = user.name || 'Admin';
+
+    let currentComplaintId = null;
+
+    function loadAllComplaints() {
+      const status = document.getElementById('adm-filter-status').value;
+      const cat = document.getElementById('adm-filter-cat').value;
+      let all = getAllComplaints();
+      if (status) all = all.filter(c => c.status === status);
+      if (cat) all = all.filter(c => c.category === cat);
+      all = [...all].reverse();
+
+      document.getElementById('complaint-count').textContent = `(${all.length} complaints)`;
+      const tbody = document.getElementById('adm-tbody');
+
+      if (!all.length) {
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span class="empty-icon">📭</span><h3>No complaints found</h3><p>Try clearing the filters.</p></div></td></tr>`;
+        return;
+      }
+      tbody.innerHTML = all.map(c => `
+        <tr>
+          <td style="color:var(--text-muted);font-size:12px;">#${c.id}</td>
+          <td>👤 <span style="font-weight:500;">${c.student}</span></td>
+          <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.title}</td>
+          <td><span class="cat-badge">${c.category}</span></td>
+          <td>${statusBadge(c.status)}</td>
+          <td style="color:var(--text-muted);font-size:12px;">${formatDate(c.submitted_at)}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="openManage(${c.id})">⚙️ Manage</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openManage(id) {
+      const c = getAllComplaints().find(x => x.id == id);
+      if (!c) return;
+      currentComplaintId = id;
+      document.getElementById('manage-modal-title').textContent = c.title;
+      document.getElementById('mng-student').textContent = '👤 ' + c.student;
+      document.getElementById('mng-cat-status').innerHTML = `<span class="cat-badge">${c.category}</span> &nbsp; ${statusBadge(c.status)}`;
+      document.getElementById('mng-desc').textContent = c.description;
+      document.getElementById('mng-status').value = c.status;
+      document.getElementById('mng-response').value = c.response || '';
+      document.getElementById('manage-modal').classList.add('open');
+    }
+
+    function closeManageModal() {
+      document.getElementById('manage-modal').classList.remove('open');
+      currentComplaintId = null;
+    }
+
+    function saveUpdate() {
+      if (!currentComplaintId) return;
+      const newStatus = document.getElementById('mng-status').value;
+      const response = document.getElementById('mng-response').value.trim();
+      updateComplaint(currentComplaintId, newStatus, response);
+
+      // Add notification for the student
+      const c = getAllComplaints().find(x => x.id == currentComplaintId);
+      if (c) {
+        addNotification(c.student, {
+          icon: newStatus === 'Resolved' ? '✅' : '🔄',
+          text: `Your complaint "${c.title}" status updated to: ${newStatus}`,
+          time: new Date().toISOString()
+        });
+      }
+
+      showToast('Complaint updated successfully! ✅', 'success');
+      closeManageModal();
+      loadAllComplaints();
+    }
+
+    function exportCSV() {
+      const all = getAllComplaints();
+      if (!all.length) return showToast('No complaints to export.', 'error');
+      const rows = [['ID','Student','Title','Category','Status','Response','Submitted At']];
+      all.forEach(c => rows.push([c.id, c.student, c.title, c.category, c.status, c.response || '', formatDate(c.submitted_at)]));
+      const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'acet_complaints_report.csv';
+      a.click();
+      showToast('CSV report downloaded! 📥', 'success');
+    }
+
+    loadAllComplaints();
+  </script>
+</body>
+</html>

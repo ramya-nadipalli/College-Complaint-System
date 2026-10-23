@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Complaint – ACET Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar (same as dashboard) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="brand-icon">🎓</span>
+          <span class="brand-name">ACET Portal</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Navigation</span>
+        <a href="dashboard.html" class="sidebar-link"><span class="link-icon">🏠</span> Dashboard</a>
+        <a href="submit.html" class="sidebar-link active"><span class="link-icon">📝</span> Submit Complaint</a>
+        <a href="my-complaints.html" class="sidebar-link"><span class="link-icon">📋</span> My Complaints</a>
+        <a href="track.html" class="sidebar-link"><span class="link-icon">🔍</span> Track Status</a>
+        <span class="nav-section-label" style="margin-top:24px;">Account</span>
+        <a href="#" class="sidebar-link" onclick="logout()"><span class="link-icon">🚪</span> Logout</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-pill">
+          <div class="avatar" id="user-avatar">R</div>
+          <div class="user-info">
+            <span class="user-name" id="user-display-name">Student</span>
+            <span class="user-role">Student</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <div class="topbar-title">
+          <h2>Submit a Complaint</h2>
+          <p>Fill out the form below to raise a new complaint</p>
+        </div>
+        <div class="topbar-actions">
+          <a href="my-complaints.html" class="btn btn-ghost btn-sm">📋 My Complaints</a>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div style="max-width:680px;margin:0 auto;">
+          <div class="glass-card animate-in" style="padding:36px;">
+            <div id="submit-success" class="alert alert-success" style="display:none;margin-bottom:24px;">
+              <span>✅</span> Complaint submitted successfully! Redirecting…
+            </div>
+
+            <form id="complaint-form" novalidate>
+              <div class="form-group">
+                <label class="form-label" for="complaint-title">Complaint Title <span style="color:var(--color-danger)">*</span></label>
+                <input type="text" id="complaint-title" class="form-control" placeholder="e.g. Hostel water supply not available in Block C" required maxlength="200">
+                <span style="font-size:11px;color:var(--text-muted);" id="title-chars">0 / 200 characters</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="complaint-category">Category <span style="color:var(--color-danger)">*</span></label>
+                <select id="complaint-category" class="form-select" required>
+                  <option value="" disabled selected>-- Select a category --</option>
+                  <option value="Hostel">🏠 Hostel</option>
+                  <option value="Academics">📚 Academics</option>
+                  <option value="Infrastructure">🏗️ Infrastructure</option>
+                  <option value="Others">❓ Others</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="complaint-desc">Detailed Description <span style="color:var(--color-danger)">*</span></label>
+                <textarea id="complaint-desc" class="form-control" rows="5" placeholder="Describe your complaint in detail. Include specific locations, dates, or any other relevant information that will help resolve it faster." required></textarea>
+              </div>
+
+              <!-- Category tips -->
+              <div id="category-tip" style="display:none;margin-bottom:20px;" class="alert alert-warning">
+                <span>💡</span><span id="category-tip-text"></span>
+              </div>
+
+              <div style="display:flex;gap:12px;">
+                <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" id="submit-btn">
+                  🚀 Submit Complaint
+                </button>
+                <button type="button" class="btn btn-ghost btn-lg" onclick="resetForm()">
+                  Reset
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Complaint Guidelines -->
+          <div class="glass-card" style="padding:28px;margin-top:24px;">
+            <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;">📌 Guidelines for Submitting a Complaint</h3>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+              <li style="display:flex;gap:10px;font-size:13px;color:var(--text-secondary);"><span>✅</span> Be specific and clear about your issue.</li>
+              <li style="display:flex;gap:10px;font-size:13px;color:var(--text-secondary);"><span>✅</span> Choose the most appropriate category for faster routing.</li>
+              <li style="display:flex;gap:10px;font-size:13px;color:var(--text-secondary);"><span>✅</span> Avoid submitting duplicate complaints for the same issue.</li>
+              <li style="display:flex;gap:10px;font-size:13px;color:var(--text-secondary);"><span>✅</span> Track your complaint status from the "My Complaints" page.</li>
+              <li style="display:flex;gap:10px;font-size:13px;color:var(--text-secondary);"><span>⏱️</span> Typical resolution time: 3–7 working days.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="main.js"></script>
+  <script src="data.js"></script>
+  <script>
+    authGuard();
+    const user = JSON.parse(localStorage.getItem('acet_user') || '{}');
+    document.getElementById('user-display-name').textContent = user.name || 'Student';
+    document.getElementById('user-avatar').textContent = (user.name || 'S')[0].toUpperCase();
+
+    const titleInput = document.getElementById('complaint-title');
+    titleInput.addEventListener('input', function() {
+      document.getElementById('title-chars').textContent = this.value.length + ' / 200 characters';
+    });
+
+    const catTips = {
+      Hostel: 'For hostel issues, mention your block number and room number in the description.',
+      Academics: 'For academic issues, mention the subject code, professor name, and semester.',
+      Infrastructure: 'For infrastructure issues, mention the exact building, floor, or area.',
+      Others: 'Please describe the issue clearly so it can be routed to the right department.'
+    };
+    document.getElementById('complaint-category').addEventListener('change', function() {
+      const tip = catTips[this.value];
+      const tipEl = document.getElementById('category-tip');
+      if (tip) {
+        tipEl.style.display = 'flex';
+        document.getElementById('category-tip-text').textContent = tip;
+      } else {
+        tipEl.style.display = 'none';
+      }
+    });
+
+    document.getElementById('complaint-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('complaint-title').value.trim();
+      const category = document.getElementById('complaint-category').value;
+      const desc = document.getElementById('complaint-desc').value.trim();
+
+      if (!title) return showToast('Please enter a complaint title.', 'error');
+      if (!category) return showToast('Please select a category.', 'error');
+      if (desc.length < 20) return showToast('Description must be at least 20 characters.', 'error');
+
+      const btn = document.getElementById('submit-btn');
+      btn.textContent = '⏳ Submitting…'; btn.disabled = true;
+
+      setTimeout(() => {
+        const complaint = {
+          id: Date.now(),
+          student: user.username,
+          title,
+          category,
+          description: desc,
+          status: 'Pending',
+          response: null,
+          submitted_at: new Date().toISOString()
+        };
+        addComplaint(complaint);
+        addNotification(user.username, { icon: '📝', text: 'Your complaint "' + title + '" has been submitted.', time: new Date().toISOString() });
+        document.getElementById('submit-success').style.display = 'flex';
+        document.getElementById('complaint-form').style.display = 'none';
+        showToast('Complaint submitted successfully!', 'success');
+        setTimeout(() => { window.location.href = 'my-complaints.html'; }, 1500);
+      }, 800);
+    });
+
+    function resetForm() {
+      document.getElementById('complaint-form').reset();
+      document.getElementById('title-chars').textContent = '0 / 200 characters';
+      document.getElementById('category-tip').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

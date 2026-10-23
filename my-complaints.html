@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Complaints – ACET Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="brand-icon">🎓</span>
+          <span class="brand-name">ACET Portal</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Navigation</span>
+        <a href="dashboard.html" class="sidebar-link"><span class="link-icon">🏠</span> Dashboard</a>
+        <a href="submit.html" class="sidebar-link"><span class="link-icon">📝</span> Submit Complaint</a>
+        <a href="my-complaints.html" class="sidebar-link active"><span class="link-icon">📋</span> My Complaints</a>
+        <a href="track.html" class="sidebar-link"><span class="link-icon">🔍</span> Track Status</a>
+        <span class="nav-section-label" style="margin-top:24px;">Account</span>
+        <a href="#" class="sidebar-link" onclick="logout()"><span class="link-icon">🚪</span> Logout</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-pill">
+          <div class="avatar" id="user-avatar">R</div>
+          <div class="user-info">
+            <span class="user-name" id="user-display-name">Student</span>
+            <span class="user-role">Student</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <div class="topbar-title">
+          <h2>📋 My Complaints</h2>
+          <p>Track and manage all your submitted complaints</p>
+        </div>
+        <div class="topbar-actions">
+          <a href="submit.html" class="btn btn-primary btn-sm">+ New Complaint</a>
+        </div>
+      </div>
+
+      <div class="page-content stagger">
+        <div class="table-card glass-card">
+          <div class="table-header">
+            <span class="table-title">All Complaints</span>
+            <div class="table-actions">
+              <select class="filter-select" id="filter-status" onchange="loadComplaints()">
+                <option value="">All Status</option>
+                <option value="Pending">⏳ Pending</option>
+                <option value="In Progress">🔄 In Progress</option>
+                <option value="Resolved">✅ Resolved</option>
+              </select>
+              <select class="filter-select" id="filter-cat" onchange="loadComplaints()">
+                <option value="">All Categories</option>
+                <option value="Hostel">🏠 Hostel</option>
+                <option value="Academics">📚 Academics</option>
+                <option value="Infrastructure">🏗️ Infrastructure</option>
+                <option value="Others">❓ Others</option>
+              </select>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody id="complaints-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">Complaint Details</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Progress Steps -->
+        <div class="progress-steps" id="modal-steps">
+          <div class="step" id="step-submitted"><div class="step-circle">📝</div><div class="step-label">Submitted</div></div>
+          <div class="step" id="step-review"><div class="step-circle">👀</div><div class="step-label">Under Review</div></div>
+          <div class="step" id="step-progress"><div class="step-circle">🔄</div><div class="step-label">In Progress</div></div>
+          <div class="step" id="step-resolved"><div class="step-circle">✅</div><div class="step-label">Resolved</div></div>
+        </div>
+
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);">Category</span>
+            <p id="modal-category" style="margin-top:4px;font-size:14px;"></p>
+          </div>
+          <div>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);">Description</span>
+            <p id="modal-desc" style="margin-top:4px;font-size:14px;color:var(--text-secondary);line-height:1.6;"></p>
+          </div>
+          <div>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);">Submitted On</span>
+            <p id="modal-date" style="margin-top:4px;font-size:14px;color:var(--text-secondary);"></p>
+          </div>
+          <div id="modal-response-wrap" style="display:none;">
+            <div class="response-box">
+              <div class="response-box-title">✅ Admin Response</div>
+              <p id="modal-response"></p>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div id="modal-timeline" style="margin-top:8px;">
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);">Activity Timeline</span>
+            <div class="timeline" id="timeline-items" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="main.js"></script>
+  <script src="data.js"></script>
+  <script>
+    authGuard();
+    const user = JSON.parse(localStorage.getItem('acet_user') || '{}');
+    document.getElementById('user-display-name').textContent = user.name || 'Student';
+    document.getElementById('user-avatar').textContent = (user.name || 'S')[0].toUpperCase();
+
+    function loadComplaints() {
+      const status = document.getElementById('filter-status').value;
+      const cat = document.getElementById('filter-cat').value;
+      let complaints = getComplaints(user.username);
+      if (status) complaints = complaints.filter(c => c.status === status);
+      if (cat) complaints = complaints.filter(c => c.category === cat);
+      complaints = [...complaints].reverse();
+
+      const tbody = document.getElementById('complaints-tbody');
+      if (!complaints.length) {
+        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><span class="empty-icon">📭</span><h3>No complaints found</h3><p>Try changing the filters or <a href="submit.html" style="color:var(--color-accent);">submit a new complaint</a>.</p></div></td></tr>`;
+        return;
+      }
+      tbody.innerHTML = complaints.map(c => `
+        <tr>
+          <td style="color:var(--text-muted);font-size:12px;">#${c.id}</td>
+          <td><span style="font-weight:500;">${c.title}</span></td>
+          <td><span class="cat-badge">${c.category}</span></td>
+          <td>${statusBadge(c.status)}</td>
+          <td style="color:var(--text-muted);font-size:12px;">${formatDate(c.submitted_at)}</td>
+          <td><button class="btn btn-outline btn-sm" onclick="openDetail(${c.id})">View Details</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function openDetail(id) {
+      const complaints = getComplaints(user.username);
+      const c = complaints.find(x => x.id == id);
+      if (!c) return;
+
+      document.getElementById('modal-title').textContent = c.title;
+      document.getElementById('modal-category').innerHTML = `<span class="cat-badge">${c.category}</span> &nbsp; ${statusBadge(c.status)}`;
+      document.getElementById('modal-desc').textContent = c.description;
+      document.getElementById('modal-date').textContent = new Date(c.submitted_at).toLocaleString('en-IN', { dateStyle: 'long', timeStyle: 'short' });
+
+      if (c.response) {
+        document.getElementById('modal-response-wrap').style.display = 'block';
+        document.getElementById('modal-response').textContent = c.response;
+      } else {
+        document.getElementById('modal-response-wrap').style.display = 'none';
+      }
+
+      // Progress steps
+      const stepMap = {
+        'Pending': 1,
+        'In Progress': 3,
+        'Resolved': 4
+      };
+      const level = stepMap[c.status] || 1;
+      ['step-submitted','step-review','step-progress','step-resolved'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        el.className = 'step ' + (i < level ? 'done' : i === level - 1 ? 'active' : '');
+      });
+
+      // Timeline
+      const events = [
+        { icon: '📝', label: 'Complaint Submitted', sub: formatDate(c.submitted_at), done: true },
+        { icon: '👀', label: 'Under Admin Review', sub: 'Assigned to department', done: level >= 2 },
+        { icon: '🔄', label: 'In Progress', sub: 'Being worked on', done: level >= 3 },
+        { icon: '✅', label: 'Resolved', sub: c.response || 'Pending resolution', done: level >= 4 }
+      ];
+      document.getElementById('timeline-items').innerHTML = events.map(ev => `
+        <div class="timeline-item" style="opacity:${ev.done ? '1' : '0.4'};">
+          <div class="timeline-dot ${ev.done ? 'done' : 'waiting'}">${ev.icon}</div>
+          <div class="timeline-content">
+            <div class="timeline-title">${ev.label}</div>
+            <div class="timeline-sub">${ev.sub}</div>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('detail-modal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('detail-modal').classList.remove('open');
+    }
+
+    loadComplaints();
+  </script>
+</body>
+</html>

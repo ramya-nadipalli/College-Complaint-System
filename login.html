@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Student login to ACET College Complaint Portal">
+  <title>Student Login – ACET Complaint Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+
+  <!-- Back link -->
+  <a href="index.html" style="position:fixed;top:20px;left:24px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);z-index:10;transition:color .3s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">
+    ← Back to Home
+  </a>
+
+  <div class="auth-box glass-card animate-in">
+    <div class="auth-logo">
+      <span class="logo-icon">🎓</span>
+      <h1>Student Login</h1>
+      <p>Access the ACET Complaint Portal</p>
+    </div>
+
+    <div id="login-error" class="alert alert-error" style="display:none;">
+      <span>⚠️</span> <span id="login-error-msg">Invalid username or password.</span>
+    </div>
+
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" autocomplete="username" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
+          <button type="button" id="toggle-pwd" onclick="togglePwd()" style="position:absolute;right:12px;background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;">👁️</button>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-bottom:20px;">
+        <a href="#" style="font-size:13px;color:var(--color-accent);" onclick="showToast('Password reset link has been sent to your email!','info'); return false;">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg" id="login-btn">
+        Login to Portal
+      </button>
+    </form>
+
+    <div class="divider">Demo Accounts</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-ghost btn-sm" style="flex:1;border:1px solid var(--border-glass);" onclick="fillDemo('student1','student123')">
+        👨‍🎓 Student Demo
+      </button>
+    </div>
+
+    <p class="auth-footer">Don't have an account? <a href="register.html">Register here</a></p>
+    <p class="auth-footer" style="margin-top:8px;">Are you an admin? <a href="admin-login.html">Admin Login →</a></p>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="main.js"></script>
+  <script>
+    // Demo credentials: username → student1, password → student123
+    const DEMO_USERS = [
+      { username: 'student1', password: 'student123', name: 'Ramya Nadipalli', role: 'student' },
+      { username: 'priya', password: 'priya123', name: 'Priya Sharma', role: 'student' },
+      { username: 'rahul', password: 'rahul123', name: 'Rahul Kumar', role: 'student' },
+    ];
+
+    function fillDemo(u, p) {
+      document.getElementById('username').value = u;
+      document.getElementById('password').value = p;
+      showToast('Demo credentials filled! Click Login.', 'info');
+    }
+
+    function togglePwd() {
+      const inp = document.getElementById('password');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('login-btn');
+
+      btn.textContent = 'Logging in...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        const user = DEMO_USERS.find(u => u.username === username && u.password === password);
+        if (user) {
+          localStorage.setItem('acet_user', JSON.stringify(user));
+          localStorage.setItem('acet_logged_in', 'true');
+          showToast('Welcome back, ' + user.name + '! 🎉', 'success');
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 900);
+        } else {
+          document.getElementById('login-error').style.display = 'flex';
+          document.getElementById('login-error-msg').textContent = 'Invalid username or password.';
+          btn.textContent = 'Login to Portal';
+          btn.disabled = false;
+          document.getElementById('password').value = '';
+        }
+      }, 800);
+    });
+  </script>
+</body>
+</html>

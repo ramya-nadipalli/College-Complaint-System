@@ -1,71 +1,47 @@
-# College Complaint Management System
+# 🎓 ACET College Complaint Portal – Live Project
 
-## Overview
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Click%20Here-6366f1?style=for-the-badge&logo=github)](https://ramya-nadipalli.github.io/college-complaint-portal/)
 
-The College Complaint Management System is a web-based application developed using Django and SQLite. It provides a centralized platform where students can submit complaints, track their status, and receive updates, while administrators can efficiently manage and resolve issues.
+A **fully redesigned, premium dark-mode** frontend of the College Complaint Management System — built with pure HTML, CSS & JavaScript.
 
-## Features
+> 🔗 **Live URL:** https://ramya-nadipalli.github.io/college-complaint-portal/
 
-- Student Registration and Login
-- Complaint Submission
-- Complaint Tracking
-- Complaint Status Updates
-- Admin Dashboard
-- Complaint Management System
-- User-Friendly Interface
+---
 
-## Technologies Used
+## 🚀 Features
 
-- Python
-- Django
-- SQLite
-- HTML
-- CSS
-- JavaScript
-- Bootstrap
+- 🌙 **Dark Mode Glassmorphism UI** — Modern, premium design
+- 📊 **Animated Dashboard** — Donut charts, bar charts, stat counters
+- 👤 **Student Portal** — Register, Login, Submit & Track complaints
+- 🛡️ **Admin Panel** — Manage all complaints, update status, respond
+- 🔍 **Real-time Status Tracking** — Visual progress steps + timeline
+- 🔔 **Notification Badges** — Live alerts for pending complaints
+- ⬇️ **CSV Export** — Download complaint reports as CSV
+- 📱 **Fully Responsive** — Works on mobile, tablet, and desktop
 
-## Project Structure
+---
 
-```
-college_portal/
-│
-├── Complaints/
-├── Templates/
-├── static/
-├── college_portal/
-├── manage.py
-└── db.sqlite3
-```
+## 🔑 Demo Credentials
 
-## How It Works
+| Role | Username | Password |
+|------|----------|----------|
+| Student | student1 | student123 |
+| Admin | admin | admin123 |
 
-1. Students register and log in.
-2. Students submit complaints through the portal.
-3. Complaints are stored in the database.
-4. Administrators review complaints.
-5. Administrators update complaint status.
-6. Students can track complaint progress.
+---
 
-## Future Enhancements
+## 🛠️ Tech Stack
 
-- Email Notifications
-- SMS Alerts
-- Complaint Priority Levels
-- File Attachments
-- Analytics Dashboard
-- Mobile Responsive Design
+HTML5 · CSS3 (Glassmorphism + Animations) · JavaScript ES6+ · Google Fonts (Inter)
 
-## Learning Outcomes
+---
 
-Through this project, I gained experience in:
+## 🔗 Related Repository
 
-- Django Framework
-- Database Management with SQLite
-- CRUD Operations
-- Authentication Systems
-- Frontend Development
-- Full Stack Web Development
+Original Django backend: https://github.com/ramya-nadipalli/College-Complaint-System
 
-## Author
+---
 
-**Ramya Nadipalli**
+## 👩‍💻 Developer
+
+**Ramya Nadipalli** — https://github.com/ramya-nadipalli

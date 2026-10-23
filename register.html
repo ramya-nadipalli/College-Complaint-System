@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Register as a student on ACET College Complaint Portal">
+  <title>Student Registration – ACET Complaint Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+
+  <a href="index.html" style="position:fixed;top:20px;left:24px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);z-index:10;transition:color .3s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">
+    ← Back to Home
+  </a>
+
+  <div class="auth-box glass-card animate-in">
+    <div class="auth-logo">
+      <span class="logo-icon">📝</span>
+      <h1>Create Account</h1>
+      <p>Register to submit and track complaints</p>
+    </div>
+
+    <div id="reg-error" class="alert alert-error" style="display:none;">
+      <span>⚠️</span><span id="reg-error-msg"></span>
+    </div>
+    <div id="reg-success" class="alert alert-success" style="display:none;">
+      <span>✅</span> Registration successful! Redirecting to login…
+    </div>
+
+    <form id="register-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="fullname">Full Name</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input type="text" id="fullname" class="form-control" placeholder="e.g. Ramya Nadipalli" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="reg-username">Username</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🪪</span>
+          <input type="text" id="reg-username" class="form-control" placeholder="Choose a username" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="reg-email">Email Address</label>
+        <div class="input-wrapper">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="reg-email" class="form-control" placeholder="your@email.com" required>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password</label>
+          <input type="password" id="reg-password" class="form-control" placeholder="Min 6 chars" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" class="form-control" placeholder="Repeat password" required>
+        </div>
+      </div>
+
+      <!-- Password strength -->
+      <div id="pwd-strength" style="margin-top:-10px;margin-bottom:16px;display:none;">
+        <div style="height:4px;border-radius:2px;background:var(--border-glass);overflow:hidden;margin-bottom:4px;">
+          <div id="pwd-bar" style="height:100%;border-radius:2px;width:0;transition:width .3s,background .3s;"></div>
+        </div>
+        <span id="pwd-strength-label" style="font-size:11px;color:var(--text-muted);"></span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg" id="reg-btn">
+        Create My Account
+      </button>
+    </form>
+
+    <p class="auth-footer">Already have an account? <a href="login.html">Login here</a></p>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="main.js"></script>
+  <script>
+    const pwdInput = document.getElementById('reg-password');
+    const pwdBar = document.getElementById('pwd-bar');
+    const pwdLabel = document.getElementById('pwd-strength-label');
+
+    pwdInput.addEventListener('input', function() {
+      const v = this.value;
+      document.getElementById('pwd-strength').style.display = v ? 'block' : 'none';
+      let score = 0;
+      if (v.length >= 6) score++;
+      if (v.length >= 10) score++;
+      if (/[A-Z]/.test(v)) score++;
+      if (/[0-9]/.test(v)) score++;
+      if (/[^a-zA-Z0-9]/.test(v)) score++;
+      const levels = [
+        { w: '20%', bg: '#ef4444', label: 'Very Weak' },
+        { w: '40%', bg: '#f59e0b', label: 'Weak' },
+        { w: '60%', bg: '#f59e0b', label: 'Fair' },
+        { w: '80%', bg: '#10b981', label: 'Strong' },
+        { w: '100%', bg: '#10b981', label: '💪 Very Strong' },
+      ];
+      const l = levels[Math.min(score - 1, 4)];
+      if (l) { pwdBar.style.width = l.w; pwdBar.style.background = l.bg; pwdLabel.textContent = l.label; pwdLabel.style.color = l.bg; }
+    });
+
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('fullname').value.trim();
+      const username = document.getElementById('reg-username').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const pwd = document.getElementById('reg-password').value;
+      const confirm = document.getElementById('confirm-password').value;
+      const errEl = document.getElementById('reg-error');
+      const errMsg = document.getElementById('reg-error-msg');
+
+      const showErr = (msg) => {
+        errEl.style.display = 'flex'; errMsg.textContent = msg;
+      };
+      errEl.style.display = 'none';
+
+      if (!name) return showErr('Please enter your full name.');
+      if (!username || username.length < 3) return showErr('Username must be at least 3 characters.');
+      if (!email.includes('@')) return showErr('Please enter a valid email address.');
+      if (pwd.length < 6) return showErr('Password must be at least 6 characters.');
+      if (pwd !== confirm) return showErr('Passwords do not match.');
+
+      // Check if username exists
+      const existing = JSON.parse(localStorage.getItem('acet_registered_users') || '[]');
+      if (existing.find(u => u.username === username)) return showErr('Username already taken. Choose another.');
+      if (existing.find(u => u.email === email)) return showErr('Email already registered.');
+
+      const btn = document.getElementById('reg-btn');
+      btn.textContent = 'Creating account…'; btn.disabled = true;
+
+      setTimeout(() => {
+        const newUser = { username, name, email, password: pwd, role: 'student' };
+        existing.push(newUser);
+        localStorage.setItem('acet_registered_users', JSON.stringify(existing));
+        document.getElementById('reg-success').style.display = 'flex';
+        document.getElementById('register-form').style.display = 'none';
+        setTimeout(() => { window.location.href = 'login.html'; }, 1600);
+      }, 700);
+    });
+  </script>
+</body>
+</html>

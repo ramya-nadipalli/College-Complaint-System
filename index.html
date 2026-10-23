@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ACET College Complaint Management Portal – Submit, track and manage college complaints online.">
+  <title>ACET Complaint Portal – Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="home-page">
+
+  <!-- Animated background blobs -->
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="bg-blob blob3"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">🎓</div>
+      <span class="brand-name">ACET Portal</span>
+    </div>
+    <div class="nav-links">
+      <a href="login.html" class="nav-link btn-ghost">Student Login</a>
+      <a href="admin-login.html" class="nav-link btn-outline">Admin Login</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content animate-in">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Online Complaint Management System
+      </div>
+      <h1 class="hero-title">
+        Raise Your Voice,<br>
+        <span class="gradient-text">We'll Listen</span>
+      </h1>
+      <p class="hero-subtitle">
+        ACET's centralized complaint portal helps students submit, track, and resolve
+        academic, hostel, infrastructure, and general issues — all in one place.
+      </p>
+      <div class="hero-actions">
+        <a href="register.html" class="btn btn-primary btn-lg">
+          <span>Get Started</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="login.html" class="btn btn-ghost btn-lg">Student Login</a>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num" data-count="340">0</span>
+          <span class="stat-label">Complaints Filed</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count="287">0</span>
+          <span class="stat-label">Resolved</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count="94">0</span>
+          <span class="stat-label">Resolution Rate %</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual animate-in-right">
+      <div class="portal-card glass-card">
+        <div class="card-header-row">
+          <div class="card-dot red"></div>
+          <div class="card-dot yellow"></div>
+          <div class="card-dot green"></div>
+          <span class="card-label">Live Complaints</span>
+        </div>
+        <div class="mini-complaints">
+          <div class="mini-complaint pending">
+            <div class="mini-icon">📚</div>
+            <div class="mini-info">
+              <span class="mini-title">Exam timetable not updated</span>
+              <span class="mini-cat">Academics</span>
+            </div>
+            <span class="mini-badge pending-badge">Pending</span>
+          </div>
+          <div class="mini-complaint progress">
+            <div class="mini-icon">🏠</div>
+            <div class="mini-info">
+              <span class="mini-title">Hostel water supply issue</span>
+              <span class="mini-cat">Hostel</span>
+            </div>
+            <span class="mini-badge progress-badge">In Progress</span>
+          </div>
+          <div class="mini-complaint resolved">
+            <div class="mini-icon">🏗️</div>
+            <div class="mini-info">
+              <span class="mini-title">Library projector broken</span>
+              <span class="mini-cat">Infrastructure</span>
+            </div>
+            <span class="mini-badge resolved-badge">Resolved ✓</span>
+          </div>
+          <div class="mini-complaint pending">
+            <div class="mini-icon">❓</div>
+            <div class="mini-info">
+              <span class="mini-title">Wi-Fi not working in block B</span>
+              <span class="mini-cat">Others</span>
+            </div>
+            <span class="mini-badge pending-badge">Pending</span>
+          </div>
+        </div>
+        <div class="card-footer-row">
+          <span class="notification-dot pulse"></span>
+          <span class="footer-text">3 new complaints today</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">A seamless, three-step process from submission to resolution</p>
+    <div class="features-grid">
+      <div class="feature-card glass-card">
+        <div class="feature-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">📝</div>
+        <h3>Submit a Complaint</h3>
+        <p>Register, log in, and fill out the complaint form with your title, category, and a detailed description.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <div class="feature-icon" style="background: linear-gradient(135deg, #f59e0b, #f97316);">🔍</div>
+        <h3>Track Your Status</h3>
+        <p>Follow your complaint in real time — Pending → In Progress → Resolved — with timestamped history.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <div class="feature-icon" style="background: linear-gradient(135deg, #10b981, #059669);">✅</div>
+        <h3>Get It Resolved</h3>
+        <p>Admins review, respond, and update your complaint status. You receive full resolution details.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-glass glass-card">
+      <h2>Ready to Raise a Complaint?</h2>
+      <p>Join hundreds of ACET students who've already used the portal to get their issues resolved.</p>
+      <div class="cta-btns">
+        <a href="register.html" class="btn btn-primary btn-lg">Register as Student</a>
+        <a href="admin-login.html" class="btn btn-outline btn-lg">Admin Panel</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>🎓 ACET College Complaint Portal &nbsp;|&nbsp; Built with Django, HTML, CSS &amp; JavaScript</p>
+    <p class="footer-sub">A student-facing complaint management system for transparent resolution.</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

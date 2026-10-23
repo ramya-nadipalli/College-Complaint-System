@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login – ACET Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <div class="bg-blob blob1" style="background:radial-gradient(circle,#dc2626,transparent);"></div>
+  <div class="bg-blob blob2" style="background:radial-gradient(circle,#9333ea,transparent);"></div>
+
+  <a href="index.html" style="position:fixed;top:20px;left:24px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);z-index:10;transition:color .3s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">
+    ← Back to Home
+  </a>
+
+  <div class="auth-box glass-card animate-in" style="border-color:rgba(220,38,38,0.2);">
+    <div class="auth-logo">
+      <span class="logo-icon">🛡️</span>
+      <h1>Admin Login</h1>
+      <p>Restricted access — Authorized personnel only</p>
+    </div>
+
+    <div id="admin-error" class="alert alert-error" style="display:none;">
+      <span>⚠️</span><span id="admin-error-msg">Invalid credentials.</span>
+    </div>
+
+    <form id="admin-login-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="admin-username">Admin Username</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🛡️</span>
+          <input type="text" id="admin-username" class="form-control" placeholder="Enter admin username" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="admin-password">Password</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🔑</span>
+          <input type="password" id="admin-password" class="form-control" placeholder="Enter password" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-lg btn-full" id="admin-btn" style="background:linear-gradient(135deg,#dc2626,#9333ea);color:#fff;box-shadow:0 4px 20px rgba(220,38,38,0.3);">
+        🔐 Admin Login
+      </button>
+    </form>
+
+    <div class="divider">Demo Account</div>
+    <button class="btn btn-ghost btn-sm btn-full" style="border:1px solid var(--border-glass);" onclick="fillAdmin()">
+      🛡️ Use Admin Demo Credentials
+    </button>
+
+    <p class="auth-footer" style="margin-top:20px;">Are you a student? <a href="login.html">Student Login →</a></p>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="main.js"></script>
+  <script>
+    const ADMIN_ACCOUNTS = [
+      { username: 'admin', password: 'admin123', name: 'Admin (ACET)', role: 'admin' },
+      { username: 'principal', password: 'principal@2024', name: 'Principal', role: 'admin' },
+    ];
+
+    function fillAdmin() {
+      document.getElementById('admin-username').value = 'admin';
+      document.getElementById('admin-password').value = 'admin123';
+      showToast('Admin credentials filled! Click Login.', 'info');
+    }
+
+    document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('admin-username').value.trim();
+      const password = document.getElementById('admin-password').value;
+      const btn = document.getElementById('admin-btn');
+      btn.textContent = 'Verifying…'; btn.disabled = true;
+
+      setTimeout(() => {
+        const admin = ADMIN_ACCOUNTS.find(a => a.username === username && a.password === password);
+        if (admin) {
+          localStorage.setItem('acet_user', JSON.stringify(admin));
+          localStorage.setItem('acet_logged_in', 'true');
+          showToast('Welcome, ' + admin.name + '! 🛡️', 'success');
+          setTimeout(() => { window.location.href = 'admin-dashboard.html'; }, 900);
+        } else {
+          document.getElementById('admin-error').style.display = 'flex';
+          document.getElementById('admin-error-msg').textContent = 'Invalid admin credentials. Only authorized staff can access this panel.';
+          btn.textContent = '🔐 Admin Login'; btn.disabled = false;
+        }
+      }, 800);
+    });
+  </script>
+</body>
+</html>
