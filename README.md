@@ -120,7 +120,10 @@ College-Complaint-System/
 ## Screenshots
 
 **Home Page**
-![Home Page](https://ramya-nadipalli.github.io/College-Complaint-System/preview-home.png)
+![Home Page](preview-home.jpg)
+
+**Student Dashboard**
+![Student Dashboard](preview-dashboard.jpg)
 
 ---
 
