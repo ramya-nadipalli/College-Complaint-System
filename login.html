@@ -96,7 +96,10 @@
       btn.disabled = true;
 
       setTimeout(() => {
-        const user = DEMO_USERS.find(u => u.username === username && u.password === password);
+        // Check both hardcoded demo users AND newly registered users from localStorage
+        const registeredUsers = JSON.parse(localStorage.getItem('acet_registered_users') || '[]');
+        const allUsers = [...DEMO_USERS, ...registeredUsers];
+        const user = allUsers.find(u => u.username === username && u.password === password);
         if (user) {
           localStorage.setItem('acet_user', JSON.stringify(user));
           localStorage.setItem('acet_logged_in', 'true');
